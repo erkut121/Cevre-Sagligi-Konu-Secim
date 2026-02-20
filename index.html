@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunum Ödevi Konu Seçimi</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <style>
+        :root { --primary: #047857; --success: #10b981; --warning: #f59e0b; --error: #ef4444; --bg: #f0fdf4; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: #064e3b; padding: 10px; line-height: 1.5; }
+        .container { max-width: 850px; margin: 0 auto; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border: 1px solid #d1fae5; }
+        
+        h1 { text-align: center; color: var(--primary); margin-bottom: 20px; font-size: 1.8rem; }
+
+        /* Geri Sayım Sayacı */
+        .countdown-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
+        .countdown-item { background: #064e3b; color: white; padding: 8px; border-radius: 8px; min-width: 55px; text-align: center; }
+        .countdown-value { font-size: 1.1rem; font-weight: bold; display: block; }
+        .countdown-label { font-size: 0.65rem; text-transform: uppercase; color: #a7f3d0; }
+        .deadline-text { text-align: center; color: var(--error); font-weight: bold; margin-bottom: 10px; font-size: 0.9rem; }
+
+        /* ⚠️ İSTEDİĞİN 4 KRİTİK KURAL KUTUSU */
+        .rules-box { background: #fffbeb; border: 2px solid #fcd34d; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
+        .rules-box h3 { margin-top: 0; color: #92400e; font-size: 1.1rem; text-align: center; border-bottom: 1px solid #fcd34d; padding-bottom: 10px; }
+        .rules-box ul { margin: 15px 0 0 0; padding-left: 20px; color: #92400e; font-weight: 600; font-size: 0.95rem; }
+        .rules-box li { margin-bottom: 8px; }
+
+        .login-box { background: #ecfdf5; padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 20px; border: 2px dashed #6ee7b7; }
+        input[type="text"] { padding: 12px; width: 85%; max-width: 320px; border: 2px solid #a7f3d0; border-radius: 8px; margin-bottom: 15px; font-size: 16px; outline: none; }
+        input[type="text"]:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); }
+        button { padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; width: 85%; max-width: 320px; transition: 0.3s; }
+        button:hover { background: #065f46; transform: translateY(-2px); }
+
+        .topic-grid { display: grid; gap: 12px; }
+        .topic-card { padding: 16px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; display: flex; flex-direction: column; }
+        .topic-card.available { cursor: pointer; border-left: 6px solid var(--success); transition: 0.2s; }
+        .topic-card.available:hover { transform: scale(1.01); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .topic-card.locked { background: #f9fafb; border-left: 6px solid #94a3b8; color: #64748b; cursor: not-allowed; }
+        
+        .status { font-size: 0.8rem; font-weight: bold; padding: 5px 12px; border-radius: 20px; align-self: flex-start; margin-top: 10px; }
+        .status-free { background: #dcfce7; color: #166534; }
+        .status-taken { background: #fee2e2; color: #991b1b; }
+        
+        .hidden { display: none; }
+        .user-info { text-align: center; font-weight: bold; color: var(--primary); margin-bottom: 15px; background: #d1fae5; padding: 10px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Sunum Ödevi Konu Seçim Sistemi</h1>
+    
+    <div class="deadline-text">⏳ Seçim Yapmak İçin Kalan Süre:</div>
+    <div class="countdown-container" id="countdown">
+        <div class="countdown-item"><span class="countdown-value" id="days">00</span><span class="countdown-label">Gün</span></div>
+        <div class="countdown-item"><span class="countdown-value" id="hours">00</span><span class="countdown-label">Saat</span></div>
+        <div class="countdown-item"><span class="countdown-value" id="minutes">00</span><span class="countdown-label">Dak</span></div>
+        <div class="countdown-item"><span class="countdown-value" id="seconds">00</span><span class="countdown-label">Sn</span></div>
+    </div>
+
+    <div class="rules-box">
+        <h3>⚠️ ÖNEMLİ KURALLAR</h3>
+        <ul>
+            <li>Bir konuyu seçtiğinizde seçiminiz <b>SİSTEME KİLİTLENİR.</b></li>
+            <li>Seçim yapıldıktan sonra <b>DEĞİŞTİRİLEMEZ</b> veya iptal edilemez.</li>
+            <li>Lütfen listeyi sonuna kadar incelemeden karar vermeyiniz.</li>
+            <li>Her öğrencinin yalnızca <b>BİR (1)</b> konu seçme hakkı vardır.</li>
+        </ul>
+    </div>
+
+    <div id="loginArea" class="login-box">
+        <input type="text" id="studentName" placeholder="Adınızı ve Soyadınızı Yazınız...">
+        <br>
+        <button id="loginBtn">Sisteme Giriş Yap</button>
+    </div>
+
+    <div id="selectionArea" class="hidden">
+        <div class="user-info">Hoş Geldiniz, <span id="userName"></span>. Lütfen konunuzu seçin:</div>
+        <div id="topicList" class="topic-grid"></div>
+    </div>
+</div>
+
+<script>
+    // Firebase Yapılandırması (Senin Bilgilerin)
+    const firebaseConfig = {
+        apiKey: "AIzaSyA8T-_bGlOLWu0bVED_5axd9oHEcsmscjE",
+        authDomain: "ogrenci-secim-890f8.firebaseapp.com",
+        databaseURL: "https://ogrenci-secim-890f8-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "ogrenci-secim-890f8",
+        storageBucket: "ogrenci-secim-890f8.firebasestorage.app",
+        messagingSenderId: "428748141240",
+        appId: "1:428748141240:web:3a13db1b852fad70e07a4d"
+    };
+
+    // Firebase'i Başlat
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const databasePath = 'sinif_B_Cevre'; // B Sınıfı için ayrı oda
+
+    let currentUser = "";
+    let hasSelected = false;
+
+    // --- SENİN VERDİĞİN KONULAR ---
+    const topics = [
+        "Dijital dünyada bilgiye nasıl ulaşılacağı ve ulaşılan bilgilerin nasıl değerlendirileceği",
+        "İnternet kullanımında uyulması gereken etik kurallar ile hukuki hak ve sorumluluklar",
+        "İnternet üzerinden eğitim veren platformlar ve uzaktan öğrenmede kullanılan araçlar",
+        "İnternet ortamında oluşturulan kişisel kimlikler ile dijital toplumun kültürel yapısı",
+        "Sosyal medya platformlarındaki iletişim şekilleri ve kişisel verilerin gizliliği",
+        "Teknolojinin insanlar arasındaki yüz yüze iletişimi nasıl etkilediği ve toplumsal ilişkilerdeki değişim",
+        "İnternette araştırma yaparken doğru bilgiye ve güvenilir kaynaklara ulaşma teknikleri",
+        "Teknolojik cihazların insan sağlığı üzerindeki olumlu ve olumsuz fiziksel etkileri",
+        "Sosyal medyadaki yalan haberlerin nasıl fark edileceği ve doğru bilgiye ulaşma yöntemleri",
+        "Öğrencilerin dersleri ve araştırmaları için interneti verimli kullanma rehberi",
+        "İnternet üzerinden yapılan ticaretin kuralları ve dijital pazarlama yöntemleri",
+        "Cep telefonları ve tabletlerin gelişimi ile gelecekte hayatımıza girecek yeni teknolojiler",
+        "İnternet ortamında kişisel bilgilerin nasıl korunacağı ve veri gizliliği kuralları",
+        "Bilgisayar oyunlarının gelişimi ve eğlence sektörünün teknolojiyle yaşadığı değişim",
+        "Dijital dünyada üretilen devasa verilerin nasıl işlendiği ve ne amaçla analiz edildiği",
+        "Gerçek dünya ile dijital dünyayı birleştiren yeni nesil teknolojik deneyimler",
+        "Yapay zekanın kullanım alanları ile bu teknolojinin yaratabileceği ahlaki sorunlar",
+        "Maddi imkansızlıkların internete erişim üzerindeki etkileri ve bu durumun yarattığı toplumsal eşitsizlikler",
+        "Sosyal medyanın karşımıza çıkardığı içerikleri nasıl seçtiği ve bizleri hangi yöne doğru yönlendirdiği",
+        "Teknoloji kullanımını bilinçli şekilde sınırlayarak dikkat dağınıklığı ve ekran bağımlılığıyla başa çıkma yolları",
+        "İnternet üzerinden yapılan saldırgan davranışlar ile bu tür siber zorbalıklardan korunma stratejileri",
+        "Bilgisayar ve telefon kullanımının doğaya verdiği fiziksel zararlar ile internetin enerji tüketimi",
+        "İnternetin gelecekteki yeni yapısı ile dijital ortamdaki mülkiyet ve sahiplik kavramının değişimi",
+        "Medyadaki grafiklerin ve sayısal verilerin insanları yanıltma biçimlerini fark etme yöntemleri",
+        "Devletler arası ilişkilerin dijital ortama taşınması ve internet üzerinden kullanılan vatandaşlık hakları",
+        "Yapay zeka ile hazırlanan sahte videoların gerçek sanılmasının yarattığı toplumsal tehlikeler",
+        "Sosyal medya hesaplarımızın bizden sonraki hukuki durumu ve internetten silinme hakkı yasaları",
+        "Sosyal medya platformları üzerinden başlatılan toplumsal hareketlerin gücü ve etkileme kapasitesi",
+        "Günlük hayatta kullandığımız cihazların internete bağlanarak birbirleriyle haberleşmesi ve hayatımıza etkileri",
+        "İnternet siteleri üzerinden yürütülen yeni nesil iş modelleri ve esnek dijital çalışma kültürü",
+        "İnternet reklamlarının kullanıcı psikolojisini nasıl etkilediği ve satın alma tercihlerine müdahale yöntemleri",
+        "Bilgi ve yazılımların internet ortamında herkes tarafından özgürce geliştirilip paylaşılması kültürü"
+    ];
+
+    // Giriş Butonu
+    document.getElementById('loginBtn').addEventListener('click', function() {
+        const val = document.getElementById('studentName').value.trim();
+        if(val.length < 3) { alert("Lütfen geçerli bir Ad Soyad giriniz."); return; }
+        currentUser = val;
+        document.getElementById('loginArea').classList.add('hidden');
+        document.getElementById('selectionArea').classList.remove('hidden');
+        document.getElementById('userName').innerText = currentUser;
+        window.scrollTo(0,0);
+    });
+
+    // Veritabanını Dinle (Canlı Güncelleme)
+    db.ref(databasePath).on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        hasSelected = Object.values(data).includes(currentUser);
+        render(data);
+    });
+
+    function render(selections) {
+        const container = document.getElementById('topicList');
+        container.innerHTML = "";
+        topics.forEach((topic, index) => {
+            const takenBy = selections[index];
+            const card = document.createElement('div');
+            card.className = `topic-card ${takenBy ? 'locked' : 'available'}`;
+            card.innerHTML = `<div><b>${index + 1}.</b> ${topic}</div>
+                <div class="status ${takenBy ? 'status-taken' : 'status-free'}">
+                ${takenBy ? '🔴 SEÇEN: ' + takenBy : '🟢 MÜSAİT (SEÇİLEBİLİR)'}</div>`;
+            
+            if(!takenBy && !hasSelected) {
+                card.onclick = function() {
+                    if(confirm(`"${topic}" konusunu seçiyorsunuz.\n\n⚠️ BU İŞLEM GERİ ALINAMAZ!\n\nOnaylıyor musunuz?`)) {
+                        db.ref(databasePath + '/' + index).set(currentUser);
+                    }
+                };
+            }
+            container.appendChild(card);
+        });
+    }
+
+    // Geri Sayım Sayacı (26.02.2026)
+    const targetDate = new Date("Feb 26, 2026 23:59:59").getTime();
+    setInterval(() => {
+        const now = new Date().getTime();
+        const dist = targetDate - now;
+        if (dist < 0) {
+            document.getElementById("countdown").innerHTML = "<b style='color:red'>SEÇİM SÜRESİ DOLMUŞTUR</b>";
+            return;
+        }
+        document.getElementById("days").innerText = Math.floor(dist / (1000 * 60 * 60 * 24));
+        document.getElementById("hours").innerText = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById("minutes").innerText = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("seconds").innerText = Math.floor((dist % (1000 * 60)) / 1000);
+    }, 1000);
+</script>
+</body>
+</html>
