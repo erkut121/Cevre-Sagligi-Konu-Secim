@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dijital Okuryazarlık Sunum Programı</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f0f4f8; margin: 0; padding: 40px 20px; }
+        .main-layout { display: flex; gap: 30px; justify-content: center; align-items: flex-start; flex-wrap: wrap; }
+        .container { background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); min-width: 700px; }
+        .contact-panel { background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); width: 340px; border-top: 6px solid #e74c3c; position: sticky; top: 20px; }
+        h2 { border-bottom: 3px solid #e74c3c; padding-bottom: 12px; font-size: 20px; color: #2c3e50; margin-top: 0; }
+        h3 { font-size: 18px; margin-bottom: 15px; color: #2c3e50; margin-top: 0; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { padding: 10px 15px; text-align: left; border-bottom: 1.5px solid #bdc3c7; font-size: 13.5px; white-space: nowrap; }
+        thead { background-color: #34495e; color: #ffffff; }
+        .group-end td { border-bottom: 4px solid #34495e !important; }
+        .name-cell { color: #2980b9; font-weight: 600; }
+        .date-cell { color: #ff1900; font-family: 'Consolas', monospace; font-weight: bold; }
+        .contact-form input, .contact-form textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #d1d8e0; border-radius: 6px; box-sizing: border-box; }
+        .contact-form button { width: 100%; padding: 14px; background-color: #e74c3c; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .contact-form button:hover { background-color: #c0392b; }
+        @media (max-width: 1150px) { .main-layout { flex-direction: column; align-items: center; } .container { min-width: 100%; } .contact-panel { width: 100%; position: static; } }
+    </style>
+</head>
+<body>
+
+<div class="main-layout">
+    
+    <div class="container">
+        <h2>Çevre Sağlığı Dijital Okuryazarlık Dersi Sunum Çizelgesi</h2>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sunum Konu Başlığı</th>
+                        <th>Katılımcı Ad Soyad</th>
+                        <th>Tarih</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Yapay zekanın kullanım alanları ile bu teknolojinin yaratabileceği ahlaki sorunlar</td><td class="name-cell">Halime Şen</td><td class="date-cell">10.03.2026</td></tr>
+                    <tr><td>İnternet ortamında kişisel bilgilerin nasıl korunacağı ve veri gizliliği kuralları</td><td class="name-cell">Kenan Demir</td><td class="date-cell">10.03.2026</td></tr>
+                    <tr class="group-end"><td>İnternet reklamlarının kullanıcı psikolojisini nasıl etkilediği ve satın alma tercihlerine müdahale yöntemleri</td><td class="name-cell">Mehmet İsa Tunç</td><td class="date-cell">10.03.2026</td></tr>
+
+                    <tr><td>Sosyal medyadaki yalan haberlerin nasıl fark edileceği ve doğru bilgiye ulaşma yöntemleri</td><td class="name-cell">Kevser Duman</td><td class="date-cell">17.03.2026</td></tr>
+                    <tr><td>Sosyal medya platformlarındaki iletişim şekilleri ve kişisel verilerin gizliliği</td><td class="name-cell">Nura Ataman</td><td class="date-cell">17.03.2026</td></tr>
+                    <tr class="group-end"><td>İnternette araştırma yaparken doğru bilgiye ve güvenilir kaynaklara ulaşma teknikleri</td><td class="name-cell">Melik Fırat Çiftçi</td><td class="date-cell">17.03.2026</td></tr>
+
+                    <tr><td>Öğrencilerin dersleri ve araştırmaları için interneti verimli kullanma rehberi</td><td class="name-cell">Enes Say</td><td class="date-cell">31.03.2026</td></tr>
+                    <tr><td>Bilgisayar oyunlarının gelişimi ve eğlence sektörünün teknolojiyle yaşadığı değişim</td><td class="name-cell">Emine Gökay</td><td class="date-cell">31.03.2026</td></tr>
+                    <tr class="group-end"><td>Teknolojinin insanlar arasındaki yüz yüze iletişimi nasıl etkilediği ve toplumsal ilişkilerdeki değişim</td><td class="name-cell">Esma Onur</td><td class="date-cell">31.03.2026</td></tr>
+
+                    <tr><td>İnternet üzerinden eğitim veren platformlar ve uzaktan öğrenmede kullanılan araçlar</td><td class="name-cell">İlayda Kızıl</td><td class="date-cell">07.04.2026</td></tr>
+                    <tr><td>Maddi imkansızlıkların internete erişim üzerindeki etkileri ve bu durumun yarattığı toplumsal eşitsizlikler</td><td class="name-cell">Nazlı Çetin</td><td class="date-cell">07.04.2026</td></tr>
+                    <tr class="group-end"><td>Bilgi ve yazılımların internet ortamında herkes tarafından özgürce geliştirilip paylaşılması kültürü</td><td class="name-cell">Eyüp Jehat Kurt</td><td class="date-cell">07.04.2026</td></tr>
+
+                    <tr><td>Dijital dünyada bilgiye nasıl ulaşılacağı ve ulaşılan bilgilerin nasıl değerlendirileceği</td><td class="name-cell">Şahadet Kılıç</td><td class="date-cell">28.04.2026</td></tr>
+                    <tr><td>İnternet üzerinden yapılan ticaretin kuralları ve dijital pazarlama yöntemleri</td><td class="name-cell">Aslıhan Acer</td><td class="date-cell">28.04.2026</td></tr>
+                    <tr class="group-end"><td>İnternet kullanımında uyulması gereken etik kurallar ile hukuki hak ve sorumluluklar</td><td class="name-cell">Esmanur Bulut</td><td class="date-cell">28.04.2026</td></tr>
+
+                    <tr><td>Gerçek dünya ile dijital dünyayı birleştiren yeni nesil teknolojik deneyimler</td><td class="name-cell">Emrah Ertunç</td><td class="date-cell">05.05.2026</td></tr>
+                    <tr><td>Yapay zeka ile hazırlanan sahte videoların gerçek sanılmasının yarattığı toplumsal tehlikeler</td><td class="name-cell">Rojin Tuncer</td><td class="date-cell">05.05.2026</td></tr>
+                    <tr class="group-end"><td>Sosyal medya hesaplarımızın bizden sonraki hukuki durumu ve internetten silinme hakkı yasaları</td><td class="name-cell">Özlem Bağış</td><td class="date-cell">05.05.2026</td></tr>
+
+                    <tr><td>İnternet ortamında oluşturulan kişisel kimlikler ile dijital toplumun kültürel yapısı</td><td class="name-cell">Evliya Yılmaz</td><td class="date-cell">12.05.2026</td></tr>
+                    <tr><td>Teknoloji kullanımını bilinçli şekilde sınırlayarak dikkat dağınıklığı ve ekran bağımlılığıyla başa çıkma yolları</td><td class="name-cell">Zeynep Kaya</td><td class="date-cell">12.05.2026</td></tr>
+                    <tr class="group-end"><td>Sosyal medyanın karşımıza çıkardığı içerikleri nasıl seçtiği ve bizleri hangi yöne doğru yönlendirdiği</td><td class="name-cell">Devrim Bingöl</td><td class="date-cell">12.05.2026</td></tr>
+
+                    <tr><td>Devletler arası ilişkilerin dijital ortama taşınması ve internet üzerinden kullanılan vatandaşlık hakları</td><td class="name-cell">İsmail Dayan</td><td class="date-cell">02.06.2026</td></tr>
+                    <tr><td>Sosyal medya platformları üzerinden başlatılan toplumsal hareketlerin gücü ve etkileme kapasitesi</td><td class="name-cell">Sevda Köçek</td><td class="date-cell">02.06.2026</td></tr>
+                    <tr><td>Bilgisayar ve telefon kullanımının doğaya verdiği fiziksel zararlar ile internetin enerji tüketimi</td><td class="name-cell">Şevval Malkoç</td><td class="date-cell">02.06.2026</td></tr>
+                    <tr class="group-end"><td>Günlük hayatta kullandığımız cihazların internete bağlanarak birbirleriyle haberleşmesi ve hayatımıza etkileri</td><td class="name-cell">Nuray Adıyaman</td><td class="date-cell">02.06.2026</td></tr>
+
+                    <tr><td>İnternet üzerinden yapılan saldırgan davranışlar ile bu tür siber zorbalıklardan korunma stratejileri</td><td class="name-cell">Elif Karadoğu</td><td class="date-cell">09.06.2026</td></tr>
+                    <tr><td>Teknolojik cihazların insan sağlığı üzerindeki olumlu ve olumsuz fiziksel etkileri</td><td class="name-cell">Dilan Erener</td><td class="date-cell">09.06.2026</td></tr>
+                    <tr><td>Cep telefonları ve tabletlerin gelişimi ile gelecekte hayatımıza girecek yeni teknolojiler</td><td class="name-cell">Melsa Arjin Kızıldoğan</td><td class="date-cell">09.06.2026</td></tr>
+                    <tr class="group-end"><td>İnternet siteleri üzerinden yürütülen yeni nesil iş modelleri ve esnek dijital çalışma kültürü</td><td class="name-cell">Ömer Erik</td><td class="date-cell">09.06.2026</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="contact-panel">
+        <h3>📩 Bir Sorun mu Var?</h3>
+        <p style="font-size: 13px; color: #666; margin-bottom: 20px; line-height: 1.4;">
+            Sunumunuzla ilgili soru sormak için formu doldurun.
+        </p>
+        <form class="contact-form" action="https://formspree.io/f/mdalbyyj" method="POST">
+            <input type="text" name="name" placeholder="Adınız Soyadınız" required>
+            <input type="email" name="email" placeholder="E-posta Adresiniz" required>
+            <textarea name="message" rows="6" placeholder="Sorunuzu buraya yazın..." required></textarea>
+            <button type="submit">Mesajı Gönder</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>
